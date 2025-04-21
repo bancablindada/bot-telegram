@@ -8,14 +8,8 @@ logging.basicConfig(
     level=logging.INFO
 )
 
-# Create Flask app
-from flask import Flask, render_template
-
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-    return "Banca Blindada Bot está funcionando en segundo plano."
+# Import the Flask app from app.py
+from app import app
 
 if __name__ == '__main__':
     # Create and run the bot

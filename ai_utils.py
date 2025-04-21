@@ -5,9 +5,12 @@ from openai import OpenAI
 
 logger = logging.getLogger(__name__)
 
-# Inicializar el cliente de OpenAI con la clave API desde las variables de entorno
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-client = OpenAI(api_key=OPENAI_API_KEY)
+# Inicializar el cliente con la clave API de OpenRouter desde las variables de entorno
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
+client = OpenAI(
+    api_key=OPENROUTER_API_KEY,
+    base_url="https://openrouter.ai/api/v1"
+)
 
 def get_ai_response(mensaje, contexto=None):
     """
@@ -41,20 +44,23 @@ def get_ai_response(mensaje, contexto=None):
         if contexto:
             system_message += f"\nContexto adicional: {contexto}"
             
-        # Llamada a la API de OpenAI
-        # El modelo más reciente de OpenAI es "gpt-4o" que se lanzó el 13 de mayo de 2024.
-        # No cambiar a menos que el usuario lo solicite explícitamente.
+        # Llamada a la API de OpenRouter
+        # Usamos Anthropic Claude para una buena relación calidad/precio
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="anthropic/claude-3-haiku",  # Modelo de Anthropic a través de OpenRouter
             messages=[
                 {"role": "system", "content": system_message},
                 {"role": "user", "content": mensaje}
             ],
-            max_tokens=150  # Límite para mantener respuestas concisas
+            max_tokens=150,  # Límite para mantener respuestas concisas
+            headers={
+                "HTTP-Referer": "https://bancablindada.com",  # Sitio web del proyecto
+                "X-Title": "Banca Blindada Bot"  # Nombre del proyecto
+            }
         )
         
         return response.choices[0].message.content.strip()
     
     except Exception as e:
-        logger.error(f"Error al generar respuesta con OpenAI: {e}")
+        logger.error(f"Error al generar respuesta con IA (OpenRouter): {e}")
         return "Lo siento, estoy teniendo problemas para procesar tu consulta. Por favor, intenta nuevamente en unos momentos. 🙏"
