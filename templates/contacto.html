@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+{% block title %}Contacto - Banca Blindada{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section py-4 mb-5 text-center">
+    <div class="container">
+        <h1 class="fw-bold mb-3">Contacto</h1>
+        <p class="lead">Estamos aquí para ayudarte con cualquier consulta</p>
+    </div>
+</div>
+
+<!-- Sección de contacto -->
+<div class="row mb-5">
+    <div class="col-lg-6 mb-4 mb-lg-0">
+        <div class="card bg-dark h-100">
+            <div class="card-body p-4">
+                <h3 class="card-title mb-4">Ponte en contacto</h3>
+                <p class="card-text mb-4">
+                    Completa el formulario y nos pondremos en contacto contigo lo antes posible. También puedes contactarnos directamente a través de nuestro bot de Telegram.
+                </p>
+                
+                <form>
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" placeholder="Tu nombre">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="tu@email.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="asunto" class="form-label">Asunto</label>
+                        <select class="form-select" id="asunto">
+                            <option selected disabled>Selecciona un asunto</option>
+                            <option value="planes">Información sobre planes</option>
+                            <option value="pronosticos">Consulta sobre pronósticos</option>
+                            <option value="pagos">Problemas con pagos</option>
+                            <option value="bot">Ayuda con el bot de Telegram</option>
+                            <option value="otro">Otro asunto</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mensaje" class="form-label">Mensaje</label>
+                        <textarea class="form-control" id="mensaje" rows="5" placeholder="¿Cómo podemos ayudarte?"></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary" disabled>Enviar mensaje (Próximamente)</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card bg-dark h-100">
+            <div class="card-body p-4">
+                <h3 class="card-title mb-4">Otras formas de contactarnos</h3>
+                
+                <div class="d-flex mb-4">
+                    <div class="me-3">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="fab fa-telegram fa-2x text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h5>Telegram</h5>
+                        <p>La forma más rápida de contactarnos es a través de nuestro bot de Telegram.</p>
+                        <a href="https://t.me/BancaBlindadaBot" class="btn btn-sm telegram-btn" target="_blank">
+                            <i class="fab fa-telegram me-2"></i> @BancaBlindadaBot
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="d-flex mb-4">
+                    <div class="me-3">
+                        <div class="bg-info rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="fas fa-envelope fa-lg text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h5>Email</h5>
+                        <p>Puedes enviarnos un correo electrónico y te responderemos en un plazo de 24-48 horas.</p>
+                        <a href="mailto:info@bancablindada.com" class="text-info">info@bancablindada.com</a>
+                    </div>
+                </div>
+                
+                <div class="d-flex mb-4">
+                    <div class="me-3">
+                        <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="fas fa-question-circle fa-lg text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h5>Preguntas Frecuentes</h5>
+                        <p>Consulta nuestra sección de preguntas frecuentes para encontrar respuestas rápidas.</p>
+                        <a href="{{ url_for('planes') }}#faqAccordion" class="btn btn-sm btn-outline-success">Ver FAQ</a>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info mt-4">
+                    <i class="fas fa-info-circle me-2"></i> Nuestro horario de atención es de lunes a viernes de 9:00 a 20:00 (CET) y sábados de 10:00 a 14:00 (CET).
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mapa de ubicación -->
+<div class="card bg-dark mb-5">
+    <div class="card-body p-4 text-center">
+        <h3 class="card-title mb-4">Nuestra ubicación</h3>
+        <p class="mb-4">Operamos principalmente de forma online, pero si necesitas contactarnos en persona, puedes encontrarnos en:</p>
+        <div class="bg-secondary p-3 rounded mb-3">
+            <p class="mb-0"><strong>Banca Blindada S.L.</strong><br>
+            Calle Innovación 123<br>
+            28021 Madrid, España</p>
+        </div>
+        <p class="small text-muted">* Se recomienda concertar cita previa por email o Telegram</p>
+    </div>
+</div>
+
+<!-- Testimonios -->
+<div class="row mb-5">
+    <div class="col-12 text-center mb-4">
+        <h3>Lo que opinan nuestros usuarios</h3>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 bg-dark">
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                </div>
+                <p class="card-text">"He seguido sus pronósticos durante tres meses y los resultados son increíbles. El bot de Telegram hace que todo sea muy fácil y rápido."</p>
+                <div class="d-flex align-items-center mt-3">
+                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                        <i class="fas fa-user fa-lg"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0">Carlos M.</h6>
+                        <small class="text-muted">Cliente desde 2024</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 bg-dark">
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star-half-alt text-warning"></i>
+                </div>
+                <p class="card-text">"El servicio de atención al cliente es excelente. Siempre responden rápido y son muy amables. Los pronósticos tienen una buena tasa de acierto."</p>
+                <div class="d-flex align-items-center mt-3">
+                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                        <i class="fas fa-user fa-lg"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0">Laura S.</h6>
+                        <small class="text-muted">Cliente desde 2024</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 bg-dark">
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                </div>
+                <p class="card-text">"Lo que más me gusta es la claridad en sus pronósticos y el análisis detallado que ofrecen. No solo te dicen qué apostar, sino por qué. Altamente recomendable."</p>
+                <div class="d-flex align-items-center mt-3">
+                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                        <i class="fas fa-user fa-lg"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0">Miguel A.</h6>
+                        <small class="text-muted">Cliente desde 2025</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
