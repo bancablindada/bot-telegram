@@ -52,11 +52,7 @@ def get_ai_response(mensaje, contexto=None):
                 {"role": "system", "content": system_message},
                 {"role": "user", "content": mensaje}
             ],
-            max_tokens=150,  # Límite para mantener respuestas concisas
-            headers={
-                "HTTP-Referer": "https://bancablindada.com",  # Sitio web del proyecto
-                "X-Title": "Banca Blindada Bot"  # Nombre del proyecto
-            }
+            max_tokens=150  # Límite para mantener respuestas concisas
         )
         
         return response.choices[0].message.content.strip()
