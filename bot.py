@@ -1,8 +1,8 @@
 import logging
-from telegram.ext import Updater, CommandHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 from config import TELEGRAM_TOKEN
-from handlers import start_command, error_handler
+from handlers import start_command, message_handler, error_handler
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +20,9 @@ def create_bot():
         
         # Register command handlers
         dispatcher.add_handler(CommandHandler("start", start_command))
+        
+        # Register message handler for text messages
+        dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, message_handler))
         
         # Register error handler
         dispatcher.add_error_handler(error_handler)

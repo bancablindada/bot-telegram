@@ -30,6 +30,33 @@ def start_command(update: Update, context: CallbackContext):
             "Lo siento, ha ocurrido un error. Por favor, intenta nuevamente más tarde."
         )
 
+def message_handler(update: Update, context: CallbackContext):
+    """
+    Handler for text messages.
+    Responds based on natural language understanding.
+    """
+    try:
+        texto = update.message.text.lower()
+
+        if any(palabra in texto for palabra in ["hola", "buenas", "hey", "qué tal", "saludos"]):
+            update.message.reply_text("¡Hola crack! 👋 Bienvenido a *Banca Blindada*, el lugar donde se ganan apuestas de verdad. ¿En qué te puedo ayudar?", parse_mode='Markdown')
+        
+        elif any(palabra in texto for palabra in ["precio", "pagar", "vale", "coste", "cuánto", "tarifa", "cuesta"]):
+            update.message.reply_text(
+                "💸 Los pronósticos de pago se mandan por el grupo principal.\n"
+                "Ahí mismo se comparte el enlace para que puedas realizar el pago y acceder al contenido exclusivo.\n"
+                "Estate atento en el grupo para no perderte nada."
+            )
+        
+        else:
+            update.message.reply_text("🤖 No entendí muy bien lo que dijiste. Si necesitas ayuda sobre pagos o pronósticos, pregúntame sin miedo 😉")
+    
+    except Exception as e:
+        logger.error(f"Error in message handler: {e}")
+        update.message.reply_text(
+            "Lo siento, ha ocurrido un error procesando tu mensaje. Por favor, intenta nuevamente más tarde."
+        )
+
 def error_handler(update: object, context: CallbackContext) -> None:
     """
     Handler for bot errors.

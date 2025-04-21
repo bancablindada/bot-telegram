@@ -1,0 +1,42 @@
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
+
+TOKEN = "7614413819:AAGyklxdklFiO1zKm8hmjhC3vncrzQJ-AKE"
+
+# Respuesta al comando /start
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    mensaje = (
+        "🎯 Bienvenido a *Banca Blindada*\n\n"
+        "Aquí vas a recibir los mejores pronósticos deportivos del mercado.\n"
+        "Pronto podrás acceder a nuestro servicio premium con pronósticos exclusivos.\n\n"
+        "🔒 El sistema de pago estará disponible en breve. ¡Permanece atento!"
+    )
+    await update.message.reply_text(mensaje, parse_mode='Markdown')
+
+
+# Respuesta basada en lenguaje natural
+async def responder_mensaje(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    texto = update.message.text.lower()
+
+    if any(palabra in texto for palabra in ["hola", "buenas", "hey", "qué tal", "saludos"]):
+        await update.message.reply_text("¡Hola crack! 👋 Bienvenido a *Banca Blindada*, el lugar donde se ganan apuestas de verdad. ¿En qué te puedo ayudar?")
+    
+    elif any(palabra in texto for palabra in ["precio", "pagar", "vale", "coste", "cuánto", "tarifa", "cuesta"]):
+        await update.message.reply_text(
+            "💸 Los pronósticos de pago se mandan por el grupo principal.\n"
+            "Ahí mismo se comparte el enlace para que puedas realizar el pago y acceder al contenido exclusivo.\n"
+            "Estate atento en el grupo para no perderte nada."
+        )
+    
+    else:
+        await update.message.reply_text("🤖 No entendí muy bien lo que dijiste. Si necesitas ayuda sobre pagos o pronósticos, pregúntame sin miedo 😉")
+
+
+if __name__ == '__main__':
+    app = ApplicationBuilder().token(TOKEN).build()
+    
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, responder_mensaje))
+
+    print("Bot funcionando en modo conversacional...")
+    app.run_polling()
