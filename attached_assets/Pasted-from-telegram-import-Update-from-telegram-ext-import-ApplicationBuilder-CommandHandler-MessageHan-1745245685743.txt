@@ -1,0 +1,51 @@
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
+
+TOKEN = "7614413819:AAGyklxdklFiO1zKm8hmjhC3vncrzQJ-AKE"
+
+# Función para el comando /start
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    mensaje = (
+        "🎯 Bienvenido a *Banca Blindada*\n\n"
+        "Aquí vas a recibir los mejores pronósticos deportivos del mercado.\n"
+        "Pronto podrás acceder a nuestro servicio premium con pronósticos exclusivos.\n\n"
+        "🔒 El sistema de pago estará disponible en breve. ¡Permanece atento!"
+    )
+    await update.message.reply_text(mensaje, parse_mode='Markdown')
+
+# Analiza mensajes con múltiples patrones
+async def responder_mensaje(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    texto = update.message.text.lower()
+
+    saludos = ["hola", "buenas", "hey", "qué tal", "saludos"]
+    despedidas = ["gracias", "muchas gracias", "ok gracias", "hasta luego", "nos vemos", "chao", "adiós"]
+    preguntas_pago = [
+        "precio", "pagar", "vale", "coste", "cuánto cuesta", "tarifa", 
+        "cómo pago", "cómo pagar", "quiero pagar", "quiero ver los pronósticos",
+        "cómo miro los pronósticos", "cómo puedo pagar", "dime precio", "cómo ver los pagos"
+    ]
+
+    if any(p in texto for p in saludos):
+        await update.message.reply_text("¡Qué tal, crack! 👋 Bienvenido a *Banca Blindada*. ¿En qué puedo ayudarte?")
+    
+    elif any(p in texto for p in despedidas):
+        await update.message.reply_text("¡De nada! Aquí me tienes para lo que necesites. Un saludo fuerte 🙌")
+
+    elif any(p in texto for p in preguntas_pago):
+        await update.message.reply_text(
+            "💸 Los pronósticos premium se envían en nuestro grupo principal.\n"
+            "Ahí mismo se publica el enlace para realizar el pago cuando hay nuevos tips disponibles.\n"
+            "👀 Mantente atento para no perdértelos."
+        )
+    
+    else:
+        await update.message.reply_text("🤖 No estoy seguro de haber entendido eso. Pero si tienes dudas sobre pagos, pronósticos o cómo funciona todo, ¡aquí estoy para ayudarte!")
+
+if __name__ == '__main__':
+    app = ApplicationBuilder().token(TOKEN).build()
+    
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, responder_mensaje))
+
+    print("Bot funcionando con respuestas más naturales...")
+    app.run_polling()
