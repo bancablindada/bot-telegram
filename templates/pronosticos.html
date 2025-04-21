@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% block title %}Pronósticos - Banca Blindada{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section py-4 mb-5 text-center">
+    <div class="container">
+        <h1 class="fw-bold mb-3">Pronósticos Deportivos</h1>
+        <p class="lead">Revisa nuestro historial de pronósticos y su efectividad</p>
+    </div>
+</div>
+
+<!-- Filtros -->
+<div class="mb-4">
+    <div class="card bg-dark">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Filtrar pronósticos</h5>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <select class="form-select" id="deporteFilter">
+                        <option value="all">Todos los deportes</option>
+                        <option value="Fútbol">Fútbol</option>
+                        <option value="Tenis">Tenis</option>
+                        <option value="Baloncesto">Baloncesto</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" id="resultadoFilter">
+                        <option value="all">Todos los resultados</option>
+                        <option value="Acertado">Acertados</option>
+                        <option value="Fallado">Fallados</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-primary w-100" id="aplicarFiltros">Aplicar filtros</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Estadísticas de Aciertos -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card bg-dark">
+            <div class="card-body">
+                <h5 class="card-title">Estadísticas de Aciertos</h5>
+                <div class="row text-center">
+                    <div class="col-md-3 mb-3">
+                        <div class="h4 mb-0 text-success">85%</div>
+                        <div class="small text-muted">Acierto global</div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="h4 mb-0 text-info">92%</div>
+                        <div class="small text-muted">Fútbol</div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="h4 mb-0 text-warning">78%</div>
+                        <div class="small text-muted">Tenis</div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="h4 mb-0 text-danger">83%</div>
+                        <div class="small text-muted">Baloncesto</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pronósticos -->
+<div class="row" id="pronosticosContainer">
+    {% for pronostico in pronosticos %}
+    <div class="col-md-6 mb-4 pronostico-item" 
+         data-deporte="{{ pronostico.deporte }}" 
+         data-resultado="{{ pronostico.resultado }}">
+        <div class="card h-100 prediction-card {% if pronostico.resultado != 'Acertado' %}failed{% endif %}">
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <h5 class="card-title">{{ pronostico.deporte }}</h5>
+                    <span class="badge {% if pronostico.resultado == 'Acertado' %}bg-success{% else %}bg-danger{% endif %}">
+                        {{ pronostico.resultado }}
+                    </span>
+                </div>
+                <h6 class="card-subtitle mb-3 text-muted">{{ pronostico.partido }}</h6>
+                <div class="card-text mb-3">
+                    <strong>Predicción:</strong> {{ pronostico.prediccion }}
+                </div>
+                <div class="d-flex justify-content-between">
+                    <small class="text-muted">{{ pronostico.fecha }}</small>
+                    <div>
+                        <span class="badge bg-secondary me-1">
+                            <i class="fas fa-chart-line me-1"></i> Cuota 1.85
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Mensaje de no hay resultados -->
+<div id="noResultsMessage" class="text-center py-5 d-none">
+    <i class="fas fa-search fa-3x mb-3 text-muted"></i>
+    <h4 class="text-muted">No se encontraron pronósticos con estos filtros</h4>
+    <button class="btn btn-outline-secondary mt-3" id="resetFiltros">Restablecer filtros</button>
+</div>
+
+<!-- Premium CTA -->
+<div class="card bg-primary text-white my-5">
+    <div class="card-body p-5 text-center">
+        <h2 class="mb-3">¿Quieres acceso a todos nuestros pronósticos premium?</h2>
+        <p class="lead mb-4">Únete a nuestro servicio premium y recibe los pronósticos con mayor porcentaje de acierto directamente en Telegram</p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <a href="{{ url_for('planes') }}" class="btn btn-light btn-lg px-4 me-md-2">Ver planes</a>
+            <a href="{{ url_for('bot_info') }}" class="btn btn-outline-light btn-lg px-4">Contactar por Telegram</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const aplicarFiltros = document.getElementById('aplicarFiltros');
+        const resetFiltros = document.getElementById('resetFiltros');
+        const deporteFilter = document.getElementById('deporteFilter');
+        const resultadoFilter = document.getElementById('resultadoFilter');
+        const pronosticosContainer = document.getElementById('pronosticosContainer');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+        const pronosticoItems = document.querySelectorAll('.pronostico-item');
+        
+        // Aplicar filtros
+        aplicarFiltros.addEventListener('click', function() {
+            const deporteValue = deporteFilter.value;
+            const resultadoValue = resultadoFilter.value;
+            
+            let visibleCount = 0;
+            
+            pronosticoItems.forEach(item => {
+                const deporte = item.dataset.deporte;
+                const resultado = item.dataset.resultado;
+                
+                const deporteMatch = deporteValue === 'all' || deporte === deporteValue;
+                const resultadoMatch = resultadoValue === 'all' || resultado === resultadoValue;
+                
+                if (deporteMatch && resultadoMatch) {
+                    item.classList.remove('d-none');
+                    visibleCount++;
+                } else {
+                    item.classList.add('d-none');
+                }
+            });
+            
+            // Mostrar mensaje si no hay resultados
+            if (visibleCount === 0) {
+                noResultsMessage.classList.remove('d-none');
+                pronosticosContainer.classList.add('d-none');
+            } else {
+                noResultsMessage.classList.add('d-none');
+                pronosticosContainer.classList.remove('d-none');
+            }
+        });
+        
+        // Restablecer filtros
+        resetFiltros.addEventListener('click', function() {
+            deporteFilter.value = 'all';
+            resultadoFilter.value = 'all';
+            
+            pronosticoItems.forEach(item => {
+                item.classList.remove('d-none');
+            });
+            
+            noResultsMessage.classList.add('d-none');
+            pronosticosContainer.classList.remove('d-none');
+        });
+    });
+</script>
+{% endblock %}

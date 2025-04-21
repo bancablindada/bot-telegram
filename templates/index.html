@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}Banca Blindada - Pronósticos Deportivos Premium{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section py-5 mb-5 text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-4">Banca Blindada</h1>
+        <p class="lead mb-5">Expertos en pronósticos deportivos de alta precisión</p>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="{{ url_for('planes') }}" class="btn btn-primary btn-lg px-4 me-md-2">Ver planes</a>
+                    <a href="{{ url_for('bot_info') }}" class="btn btn-outline-secondary btn-lg px-4">Bot de Telegram</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Section -->
+<div class="row mb-5 text-center">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 bg-dark">
+            <div class="card-body">
+                <i class="fas fa-chart-line fa-3x mb-3 text-primary"></i>
+                <h3 class="success-rate">85%</h3>
+                <p class="card-text">Porcentaje de acierto</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 bg-dark">
+            <div class="card-body">
+                <i class="fas fa-trophy fa-3x mb-3 text-warning"></i>
+                <h3 class="success-rate">1000+</h3>
+                <p class="card-text">Pronósticos exitosos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 bg-dark">
+            <div class="card-body">
+                <i class="fas fa-users fa-3x mb-3 text-info"></i>
+                <h3 class="success-rate">5000+</h3>
+                <p class="card-text">Clientes satisfechos</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Últimos Pronósticos -->
+<h2 class="mb-4">Últimos Pronósticos</h2>
+<div class="row">
+    {% for pronostico in pronosticos %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 prediction-card {% if pronostico.resultado != 'Acertado' %}failed{% endif %}">
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <h5 class="card-title">{{ pronostico.deporte }}</h5>
+                    <span class="badge {% if pronostico.resultado == 'Acertado' %}bg-success{% else %}bg-danger{% endif %}">
+                        {{ pronostico.resultado }}
+                    </span>
+                </div>
+                <h6 class="card-subtitle mb-2 text-muted">{{ pronostico.partido }}</h6>
+                <p class="card-text">Predicción: {{ pronostico.prediccion }}</p>
+                <div class="d-flex justify-content-between">
+                    <small class="text-muted">{{ pronostico.fecha }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="text-center mt-4 mb-5">
+    <a href="{{ url_for('pronosticos') }}" class="btn btn-outline-primary">Ver todos los pronósticos</a>
+</div>
+
+<!-- Cómo Funciona -->
+<div class="row mt-5 mb-5">
+    <div class="col-12 text-center mb-4">
+        <h2>Cómo Funciona</h2>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 bg-dark">
+            <div class="card-body text-center">
+                <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                    <i class="fas fa-robot fa-2x text-white"></i>
+                </div>
+                <h4>1. Únete al Bot</h4>
+                <p>Conecta con nuestro bot de Telegram y accede a los pronósticos gratuitos de muestra.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 bg-dark">
+            <div class="card-body text-center">
+                <div class="rounded-circle bg-success d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                    <i class="fas fa-credit-card fa-2x text-white"></i>
+                </div>
+                <h4>2. Elige un Plan</h4>
+                <p>Selecciona el plan que mejor se adapte a tus necesidades y realiza el pago.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 bg-dark">
+            <div class="card-body text-center">
+                <div class="rounded-circle bg-info d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                    <i class="fas fa-chart-pie fa-2x text-white"></i>
+                </div>
+                <h4>3. Recibe Pronósticos</h4>
+                <p>Obtén pronósticos premium directamente a través de Telegram y maximiza tus ganancias.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="card bg-primary text-white my-5">
+    <div class="card-body p-5 text-center">
+        <h2 class="fw-bold mb-3">¿Listo para ganar con nosotros?</h2>
+        <p class="lead mb-4">Únete ahora a Banca Blindada y transforma tu forma de apostar</p>
+        <a href="https://t.me/BancaBlindadaBot" class="btn btn-lg telegram-btn">
+            <i class="fab fa-telegram me-2"></i> Iniciar ahora en Telegram
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Animación para los números de estadísticas
+    document.addEventListener('DOMContentLoaded', function() {
+        const successRates = document.querySelectorAll('.success-rate');
+        successRates.forEach(elem => {
+            const value = elem.textContent;
+            elem.textContent = '0';
+            
+            setTimeout(() => {
+                // Animación simple de contador
+                let current = 0;
+                const target = parseInt(value.replace(/[^0-9]/g, ''));
+                const increment = Math.max(1, Math.floor(target / 50));
+                const interval = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(interval);
+                    }
+                    elem.textContent = value.includes('%') ? current + '%' : current + '+';
+                }, 30);
+            }, 500);
+        });
+    });
+</script>
+{% endblock %}

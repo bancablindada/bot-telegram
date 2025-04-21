@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Banca Blindada - Pronósticos Deportivos Premium{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .hero-section {
+            background-color: var(--bs-dark);
+            padding: 60px 0;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .prediction-card {
+            border-left: 4px solid var(--bs-success);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .prediction-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .prediction-card.failed {
+            border-left-color: var(--bs-danger);
+        }
+        
+        .plan-card {
+            transition: transform 0.3s;
+        }
+        
+        .plan-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .footer {
+            padding: 40px 0;
+            background-color: var(--bs-dark);
+            margin-top: 60px;
+        }
+        
+        .success-rate {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--bs-success);
+        }
+        
+        .telegram-btn {
+            background-color: #0088cc;
+            border-color: #0088cc;
+        }
+        
+        .telegram-btn:hover {
+            background-color: #0077b5;
+            border-color: #0077b5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-shield-alt"></i> Banca Blindada
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('index') %}active{% endif %}" href="{{ url_for('index') }}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('pronosticos') %}active{% endif %}" href="{{ url_for('pronosticos') }}">Pronósticos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('planes') %}active{% endif %}" href="{{ url_for('planes') }}">Planes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('bot_info') %}active{% endif %}" href="{{ url_for('bot_info') }}">Bot Telegram</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('contacto') %}active{% endif %}" href="{{ url_for('contacto') }}">Contacto</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer text-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>Banca Blindada</h5>
+                    <p>Pronósticos deportivos premium con alta tasa de acierto. Expertos en análisis deportivo para maximizar tus ganancias.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Enlaces</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('index') }}" class="text-decoration-none text-white-50">Inicio</a></li>
+                        <li><a href="{{ url_for('pronosticos') }}" class="text-decoration-none text-white-50">Pronósticos</a></li>
+                        <li><a href="{{ url_for('planes') }}" class="text-decoration-none text-white-50">Planes</a></li>
+                        <li><a href="{{ url_for('bot_info') }}" class="text-decoration-none text-white-50">Bot Telegram</a></li>
+                        <li><a href="{{ url_for('contacto') }}" class="text-decoration-none text-white-50">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Contáctanos</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fab fa-telegram me-2"></i> @BancaBlindadaBot</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@bancablindada.com</li>
+                    </ul>
+                    <div class="mt-3">
+                        <a href="https://t.me/BancaBlindadaBot" class="btn btn-sm telegram-btn me-2" target="_blank">
+                            <i class="fab fa-telegram"></i> Únete al canal
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 bg-secondary">
+            <div class="text-center">
+                <p class="small text-muted">© 2025 Banca Blindada. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

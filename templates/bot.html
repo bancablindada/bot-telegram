@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% block title %}Bot de Telegram - Banca Blindada{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section py-4 mb-5 text-center">
+    <div class="container">
+        <h1 class="fw-bold mb-3">Bot de Telegram</h1>
+        <p class="lead">Interactúa con Banca Blindada directamente desde tu móvil</p>
+    </div>
+</div>
+
+<!-- Bot Info Section -->
+<div class="row align-items-center mb-5">
+    <div class="col-md-6 mb-4 mb-md-0">
+        <div class="card bg-dark">
+            <div class="card-body p-4 text-center">
+                <div class="rounded-circle bg-info d-inline-flex align-items-center justify-content-center mb-4" style="width: 120px; height: 120px;">
+                    <i class="fab fa-telegram fa-4x text-white"></i>
+                </div>
+                <h2 class="card-title">{{ bot_name }}</h2>
+                <p class="card-text mb-4">Accede a nuestros pronósticos directamente en Telegram, la plataforma de mensajería más versátil.</p>
+                <a href="https://t.me/BancaBlindadaBot" class="btn btn-lg telegram-btn" target="_blank">
+                    <i class="fab fa-telegram me-2"></i> Abrir en Telegram
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <h3 class="mb-4">¿Qué puedes hacer con nuestro bot?</h3>
+        <div class="d-flex mb-3">
+            <div class="me-3">
+                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                    <i class="fas fa-chart-line text-white"></i>
+                </div>
+            </div>
+            <div>
+                <h5>Recibir pronósticos</h5>
+                <p>Accede a nuestros mejores pronósticos deportivos directamente en tu chat.</p>
+            </div>
+        </div>
+        <div class="d-flex mb-3">
+            <div class="me-3">
+                <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                    <i class="fas fa-bell text-white"></i>
+                </div>
+            </div>
+            <div>
+                <h5>Notificaciones inmediatas</h5>
+                <p>Recibe alertas cuando publicamos nuevos pronósticos premium.</p>
+            </div>
+        </div>
+        <div class="d-flex mb-3">
+            <div class="me-3">
+                <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                    <i class="fas fa-comment-dots text-white"></i>
+                </div>
+            </div>
+            <div>
+                <h5>Asistencia personalizada</h5>
+                <p>Consulta dudas y recibe recomendaciones adaptadas a tu perfil.</p>
+            </div>
+        </div>
+        <div class="d-flex mb-3">
+            <div class="me-3">
+                <div class="bg-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                    <i class="fas fa-lock text-white"></i>
+                </div>
+            </div>
+            <div>
+                <h5>Contenido exclusivo</h5>
+                <p>Accede a grupos VIP con los pronósticos de mayor fiabilidad.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Comandos del Bot -->
+<div class="card bg-dark mb-5">
+    <div class="card-body p-4">
+        <h3 class="card-title mb-4">Comandos Disponibles</h3>
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>/start</code></td>
+                        <td>Inicia el bot y recibe mensaje de bienvenida</td>
+                    </tr>
+                    <tr>
+                        <td><code>/help</code></td>
+                        <td>Muestra la lista de comandos disponibles</td>
+                    </tr>
+                    <tr>
+                        <td><code>/pronosticos</code></td>
+                        <td>Muestra los últimos pronósticos disponibles</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle me-2"></i> Además de estos comandos, el bot responde a preguntas en lenguaje natural sobre pronósticos, pagos y servicios.
+        </div>
+    </div>
+</div>
+
+<!-- Inteligencia Artificial -->
+<div class="row mb-5">
+    <div class="col-12 text-center mb-4">
+        <h3>Con la potencia de la Inteligencia Artificial</h3>
+        <p class="lead">Nuestro bot utiliza tecnología avanzada para ofrecerte la mejor experiencia</p>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 bg-dark">
+            <div class="card-body text-center">
+                <i class="fas fa-brain fa-3x mb-3 text-primary"></i>
+                <h4>Conversación Natural</h4>
+                <p>Habla con el bot como lo harías con un amigo. Entiende tus preguntas y responde de forma natural.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 bg-dark">
+            <div class="card-body text-center">
+                <i class="fas fa-robot fa-3x mb-3 text-warning"></i>
+                <h4>Respuestas Instantáneas</h4>
+                <p>Obtén información inmediata sobre pronósticos, estadísticas y servicios disponibles.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 bg-dark">
+            <div class="card-body text-center">
+                <i class="fas fa-chart-pie fa-3x mb-3 text-success"></i>
+                <h4>Análisis Personalizados</h4>
+                <p>Recibe análisis adaptados a tus intereses deportivos y estilo de apuestas.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tutorial de uso -->
+<div class="card bg-dark mb-5">
+    <div class="card-body p-4">
+        <h3 class="mb-4">Cómo empezar a usar el bot</h3>
+        
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 bg-secondary">
+                    <div class="card-body text-center">
+                        <h1 class="display-4 mb-3">1</h1>
+                        <h5 class="card-title">Busca el bot en Telegram</h5>
+                        <p class="card-text">Abre Telegram y busca <strong>@{{ bot_name }}</strong> o haz clic en el botón "Abrir en Telegram".</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 bg-secondary">
+                    <div class="card-body text-center">
+                        <h1 class="display-4 mb-3">2</h1>
+                        <h5 class="card-title">Inicia una conversación</h5>
+                        <p class="card-text">Envía el comando <code>/start</code> para iniciar el bot y recibir instrucciones.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 bg-secondary">
+                    <div class="card-body text-center">
+                        <h1 class="display-4 mb-3">3</h1>
+                        <h5 class="card-title">Explora los servicios</h5>
+                        <p class="card-text">Pregunta sobre pronósticos, planes de suscripción o cualquier duda que tengas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Final -->
+<div class="text-center mb-5">
+    <a href="https://t.me/BancaBlindadaBot" class="btn btn-lg telegram-btn" target="_blank">
+        <i class="fab fa-telegram me-2"></i> Comenzar ahora
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block title %}Planes - Banca Blindada{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section py-4 mb-5 text-center">
+    <div class="container">
+        <h1 class="fw-bold mb-3">Nuestros Planes</h1>
+        <p class="lead">Elige el plan que mejor se adapte a tus necesidades</p>
+    </div>
+</div>
+
+<!-- Planes de suscripción -->
+<div class="row mb-5">
+    <!-- Plan Básico -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 plan-card">
+            <div class="card-header bg-secondary text-white text-center py-3">
+                <h4 class="mb-0">Básico</h4>
+            </div>
+            <div class="card-body text-center">
+                <h2 class="card-title pricing-card-title mb-4">
+                    19€ <small class="text-muted fw-light">/mes</small>
+                </h2>
+                <ul class="list-unstyled mt-3 mb-4">
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 5 pronósticos premium por semana</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Acceso al grupo básico de Telegram</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Soporte básico por chat</li>
+                    <li class="mb-2"><i class="fas fa-times text-danger me-2"></i> Análisis detallados</li>
+                    <li class="mb-2"><i class="fas fa-times text-danger me-2"></i> Pronósticos en directo</li>
+                </ul>
+                <button type="button" class="w-100 btn btn-lg btn-outline-primary mt-auto" disabled>
+                    Próximamente
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Plan Pro -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 plan-card border-primary">
+            <div class="card-header bg-primary text-white text-center py-3">
+                <h4 class="mb-0">Pro</h4>
+                <span class="badge bg-warning mt-2">MÁS POPULAR</span>
+            </div>
+            <div class="card-body text-center">
+                <h2 class="card-title pricing-card-title mb-4">
+                    39€ <small class="text-muted fw-light">/mes</small>
+                </h2>
+                <ul class="list-unstyled mt-3 mb-4">
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 15 pronósticos premium por semana</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Acceso al grupo VIP de Telegram</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Soporte prioritario</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Análisis detallados</li>
+                    <li class="mb-2"><i class="fas fa-times text-danger me-2"></i> Pronósticos en directo</li>
+                </ul>
+                <button type="button" class="w-100 btn btn-lg btn-primary mt-auto" disabled>
+                    Próximamente
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Plan Premium -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 plan-card">
+            <div class="card-header bg-info text-white text-center py-3">
+                <h4 class="mb-0">Premium</h4>
+            </div>
+            <div class="card-body text-center">
+                <h2 class="card-title pricing-card-title mb-4">
+                    79€ <small class="text-muted fw-light">/mes</small>
+                </h2>
+                <ul class="list-unstyled mt-3 mb-4">
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Pronósticos premium ilimitados</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Acceso al grupo ELITE de Telegram</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Soporte 24/7 personalizado</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Análisis detallados con estadísticas</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Pronósticos en directo</li>
+                </ul>
+                <button type="button" class="w-100 btn btn-lg btn-outline-info mt-auto" disabled>
+                    Próximamente
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="card bg-dark mb-5">
+    <div class="card-body p-4">
+        <h2 class="card-title mb-4">Preguntas Frecuentes</h2>
+        
+        <div class="accordion" id="faqAccordion">
+            <!-- Pregunta 1 -->
+            <div class="accordion-item bg-dark border-secondary">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        ¿Cómo puedo pagar mi suscripción?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Actualmente estamos implementando nuestro sistema de pagos. Una vez esté disponible, se podrá pagar mediante tarjeta de crédito, PayPal o transferencia bancaria. Las instrucciones detalladas se enviarán a través del bot de Telegram.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pregunta 2 -->
+            <div class="accordion-item bg-dark border-secondary">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        ¿Cuál es la tasa de acierto de los pronósticos premium?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Nuestros pronósticos premium tienen una tasa media de acierto del 85-90%. Sin embargo, es importante recordar que ningún sistema de pronósticos puede garantizar resultados al 100%. Siempre recomendamos una gestión responsable del bankroll.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pregunta 3 -->
+            <div class="accordion-item bg-dark border-secondary">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        ¿Puedo cancelar mi suscripción en cualquier momento?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Sí, puedes cancelar tu suscripción en cualquier momento. Al cancelar, mantendrás el acceso hasta el final del período facturado. No realizamos reembolsos por períodos parciales no utilizados.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pregunta 4 -->
+            <div class="accordion-item bg-dark border-secondary">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        ¿Qué deportes cubren vuestros pronósticos?
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Cubrimos principalmente fútbol, tenis, baloncesto y béisbol. Nuestro equipo de analistas se especializa en estas disciplinas para ofrecer la mayor precisión posible en los pronósticos.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pregunta 5 -->
+            <div class="accordion-item bg-dark border-secondary">
+                <h2 class="accordion-header" id="headingFive">
+                    <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        ¿Cómo recibiré los pronósticos?
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Todos los pronósticos se envían a través de grupos privados de Telegram. Al suscribirte, recibirás un enlace de invitación al grupo correspondiente a tu plan. Es importante que tengas una cuenta de Telegram activa.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Final -->
+<div class="text-center mb-5">
+    <h3 class="mb-4">¿Tienes más preguntas sobre nuestros planes?</h3>
+    <a href="{{ url_for('bot_info') }}" class="btn btn-lg telegram-btn">
+        <i class="fab fa-telegram me-2"></i> Contacta con nosotros en Telegram
+    </a>
+</div>
+{% endblock %}
