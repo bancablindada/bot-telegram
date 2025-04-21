@@ -1,6 +1,7 @@
 import logging
 from telegram import Update
 from telegram.ext import CallbackContext
+from ai_utils import get_ai_response
 
 logger = logging.getLogger(__name__)
 
@@ -62,12 +63,74 @@ def message_handler(update: Update, context: CallbackContext):
             )
         
         else:
-            update.message.reply_text("🤖 No estoy seguro de haber entendido eso. Pero si tienes dudas sobre pagos, pronósticos o cómo funciona todo, ¡aquí estoy para ayudarte!")
+            # Usar OpenAI para generar una respuesta personalizada
+            user = update.effective_user
+            logger.info(f"Generando respuesta con IA para usuario {user.id}, mensaje: '{texto}'")
+            
+            # Añadimos un mensaje de "escribiendo..." mientras se genera la respuesta
+            update.message.chat.send_action(action="typing")
+            
+            # Obtenemos respuesta de OpenAI
+            ai_response = get_ai_response(texto)
+            update.message.reply_text(ai_response)
     
     except Exception as e:
         logger.error(f"Error in message handler: {e}")
         update.message.reply_text(
             "Lo siento, ha ocurrido un error procesando tu mensaje. Por favor, intenta nuevamente más tarde."
+        )
+
+def help_command(update: Update, context: CallbackContext):
+    """
+    Handler for the /help command.
+    Provides information about available commands and bot functionality.
+    """
+    try:
+        help_text = (
+            "🏆 *Comandos de Banca Blindada* 🏆\n\n"
+            "/start - Iniciar el bot y recibir mensaje de bienvenida\n"
+            "/help - Ver esta lista de comandos\n"
+            "/pronosticos - Ver los últimos pronósticos disponibles\n\n"
+            "También puedes escribirme en lenguaje natural para consultar sobre:\n"
+            "• Precios y pagos 💰\n"
+            "• Tipos de pronósticos disponibles 🎯\n"
+            "• Fechas de próximos eventos 📅\n"
+            "• Y cualquier otra duda que tengas sobre nuestro servicio ⚽🏀🎾"
+        )
+        
+        update.message.reply_text(help_text, parse_mode='Markdown')
+        
+    except Exception as e:
+        logger.error(f"Error in help command: {e}")
+        update.message.reply_text(
+            "Lo siento, ha ocurrido un error. Por favor, intenta nuevamente más tarde."
+        )
+
+def pronosticos_command(update: Update, context: CallbackContext):
+    """
+    Handler for the /pronosticos command.
+    Shows the latest available predictions.
+    """
+    try:
+        # En una versión futura, estos pronósticos vendrían de una base de datos
+        pronosticos_texto = (
+            "🔮 *Últimos Pronósticos* 🔮\n\n"
+            "*FÚTBOL*\n"
+            "• Real Madrid vs Barcelona: Victoria local ✅\n"
+            "• Manchester City vs Liverpool: Más de 2.5 goles ✅\n\n"
+            "*TENIS*\n"
+            "• Alcaraz vs Djokovic: Victoria Alcaraz ✅\n\n"
+            "*BALONCESTO*\n"
+            "• Lakers vs Celtics: Handicap +5.5 Celtics ❌\n\n"
+            "💎 Para acceder a los pronósticos premium con mayor porcentaje de acierto, permanece atento a la activación del sistema de pago."
+        )
+        
+        update.message.reply_text(pronosticos_texto, parse_mode='Markdown')
+        
+    except Exception as e:
+        logger.error(f"Error in pronosticos command: {e}")
+        update.message.reply_text(
+            "Lo siento, ha ocurrido un error mostrando los pronósticos. Por favor, intenta nuevamente más tarde."
         )
 
 def error_handler(update: object, context: CallbackContext) -> None:
