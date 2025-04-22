@@ -9,7 +9,7 @@ deploymentTarget = "autoscale"
 run = ["sh", "-c", "gunicorn --workers 4 --bind 0.0.0.0:5000 main:app"]
 
 [workflows]
-runButton = "Full Stack Services"
+runButton = "Unified Service"
 
 [[workflows.workflow]]
 name = "Project"
@@ -105,6 +105,15 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "gunicorn --workers 4 --bind 0.0.0.0:5000 main:app"
+
+[[workflows.workflow]]
+name = "Unified Service"
+author = 41770953
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python main.py"
 
 [[ports]]
 localPort = 5000
