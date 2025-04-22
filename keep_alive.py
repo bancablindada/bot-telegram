@@ -37,3 +37,17 @@ def keep_alive():
     server.daemon = True
     server.start()
     logger.info("Servidor web iniciado en http://0.0.0.0:8080")
+    
+    # Verificar estado del servidor cada 5 minutos
+    def check_server():
+        while True:
+            if not server.is_alive():
+                logger.warning("Servidor web caído, reiniciando...")
+                server = threading.Thread(target=run)
+                server.daemon = True
+                server.start()
+            time.sleep(300)  # 5 minutos
+            
+    checker = threading.Thread(target=check_server)
+    checker.daemon = True
+    checker.start()
