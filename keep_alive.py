@@ -34,20 +34,20 @@ def run():
         os._exit(1)
 
 def keep_alive():
-    global web_server
-    web_server = threading.Thread(target=run)
-    web_server.daemon = True
-    web_server.start()
+    server = threading.Thread(target=run)
+    server.daemon = True
+    server.start()
     logger.info("Servidor web iniciado en http://0.0.0.0:8080")
     
     def monitor():
+        nonlocal server
         while True:
             try:
-                if not web_server.is_alive():
+                if not server.is_alive():
                     logger.warning("Servidor web caído, reiniciando...")
-                    web_server = threading.Thread(target=run)
-                    web_server.daemon = True
-                    web_server.start()
+                    server = threading.Thread(target=run)
+                    server.daemon = True
+                    server.start()
             except Exception as e:
                 logger.error(f"Error en monitor: {e}")
             time.sleep(60)
