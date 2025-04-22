@@ -6,10 +6,10 @@ packages = ["openssl", "postgresql"]
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["sh", "-c", "python bot_runner.py"]
+run = ["sh", "-c", "gunicorn --workers 4 --bind 0.0.0.0:5000 main:app"]
 
 [workflows]
-runButton = "Full Stack Services"
+runButton = "Flask Web Server"
 
 [[workflows.workflow]]
 name = "Project"
@@ -96,6 +96,15 @@ args = "python bot_runner.py"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "gunicorn --bind 0.0.0.0:5000 main_flask:app"
+
+[[workflows.workflow]]
+name = "Flask Web Server"
+author = 41770953
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "gunicorn --workers 4 --bind 0.0.0.0:5000 main:app"
 
 [[ports]]
 localPort = 5000
