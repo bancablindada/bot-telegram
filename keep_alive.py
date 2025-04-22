@@ -3,6 +3,7 @@ from flask import Flask
 import threading
 import logging
 import time
+import os
 
 # Configurar logging
 logging.basicConfig(
@@ -15,7 +16,7 @@ app = Flask('')
 
 @app.route('/')
 def home():
-    logger.info("Ping recibido - Servidor activo")
+    logger.info("Ping recibido - Bot activo")
     return "Bot activo"
 
 def run():
@@ -31,6 +32,8 @@ def run():
     
     if retries == 0:
         logger.critical("No se pudo iniciar el servidor web después de 5 intentos")
+        # Forzar reinicio del proceso
+        os._exit(1)
 
 def keep_alive():
     server = threading.Thread(target=run)
@@ -38,16 +41,16 @@ def keep_alive():
     server.start()
     logger.info("Servidor web iniciado en http://0.0.0.0:8080")
     
-    # Verificar estado del servidor cada 5 minutos
-    def check_server():
+    # Monitor del servidor
+    def monitor():
         while True:
             if not server.is_alive():
                 logger.warning("Servidor web caído, reiniciando...")
                 server = threading.Thread(target=run)
                 server.daemon = True
                 server.start()
-            time.sleep(300)  # 5 minutos
-            
-    checker = threading.Thread(target=check_server)
-    checker.daemon = True
-    checker.start()
+            time.sleep(60)
+    
+    monitor_thread = threading.Thread(target=monitor)
+    monitor_thread.daemon = True
+    monitor_thread.start()
