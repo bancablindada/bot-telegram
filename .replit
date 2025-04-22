@@ -9,7 +9,7 @@ deploymentTarget = "autoscale"
 run = ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
 
 [workflows]
-runButton = "Full Stack"
+runButton = "Telegram Bot Runner"
 
 [[workflows.workflow]]
 name = "Project"
@@ -74,6 +74,15 @@ args = "python main.py"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "gunicorn --bind 0.0.0.0:5000 --reuse-port --reload main:app"
+
+[[workflows.workflow]]
+name = "Telegram Bot Runner"
+author = 41770953
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python bot_runner.py"
 
 [[ports]]
 localPort = 5000
