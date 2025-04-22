@@ -5,7 +5,6 @@ import logging
 import time
 import os
 
-# Configurar logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -32,23 +31,25 @@ def run():
     
     if retries == 0:
         logger.critical("No se pudo iniciar el servidor web después de 5 intentos")
-        # Forzar reinicio del proceso
         os._exit(1)
 
 def keep_alive():
-    server = threading.Thread(target=run)
-    server.daemon = True
-    server.start()
+    global web_server
+    web_server = threading.Thread(target=run)
+    web_server.daemon = True
+    web_server.start()
     logger.info("Servidor web iniciado en http://0.0.0.0:8080")
     
-    # Monitor del servidor
     def monitor():
         while True:
-            if not server.is_alive():
-                logger.warning("Servidor web caído, reiniciando...")
-                server = threading.Thread(target=run)
-                server.daemon = True
-                server.start()
+            try:
+                if not web_server.is_alive():
+                    logger.warning("Servidor web caído, reiniciando...")
+                    web_server = threading.Thread(target=run)
+                    web_server.daemon = True
+                    web_server.start()
+            except Exception as e:
+                logger.error(f"Error en monitor: {e}")
             time.sleep(60)
     
     monitor_thread = threading.Thread(target=monitor)
