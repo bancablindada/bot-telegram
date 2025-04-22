@@ -95,7 +95,7 @@ args = "python bot_runner.py"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "gunicorn --bind 0.0.0.0:5000 main_flask:app"
+args = "gunicorn --bind 0.0.0.0:5000 main:app"
 
 [[workflows.workflow]]
 name = "Flask Web Server"
@@ -109,10 +109,6 @@ args = "gunicorn --workers 4 --bind 0.0.0.0:5000 main:app"
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 8080
-externalPort = 8080
 
 [[ports]]
 localPort = 8080
