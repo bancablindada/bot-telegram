@@ -13,6 +13,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = Flask('')
+server_thread = None
+monitor_thread = None
 
 @app.route('/')
 def home():
