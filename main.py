@@ -1,4 +1,6 @@
 import logging
+import os
+import sys
 from telegram.ext import Updater, CommandHandler
 from bot import create_bot
 from keep_alive import keep_alive
@@ -9,7 +11,7 @@ logging.basicConfig(
     level=logging.INFO
 )
 
-# Import the Flask app from app.py
+# Import the Flask app from app.py (not used directly here, but imported for completeness)
 from app import app
 
 if __name__ == '__main__':
@@ -19,7 +21,9 @@ if __name__ == '__main__':
     # Create and run the bot
     updater = create_bot()
     print("Banca Blindada Bot is running...")
-    updater.start_polling()
+    
+    # Configuración para evitar instancias duplicadas
+    updater.start_polling(drop_pending_updates=True)
     
     # Run the bot until the user presses Ctrl-C
     updater.idle()
