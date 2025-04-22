@@ -4,6 +4,7 @@ import threading
 import logging
 import time
 import os
+import signal
 
 logging.basicConfig(
     level=logging.INFO,
@@ -34,29 +35,33 @@ def run():
         os._exit(1)
 
 def keep_alive():
-    global server_thread
+    global server_thread, monitor_thread
+    
+    # Configurar el manejo de señales
+    signal.signal(signal.SIGTERM, lambda signo, frame: None)
+    signal.signal(signal.SIGINT, lambda signo, frame: None)
+    
+    # Iniciar servidor web
     server_thread = threading.Thread(target=run)
-    server_thread.daemon = False  # Changed to False to prevent termination
+    server_thread.daemon = False
     server_thread.start()
     logger.info("Servidor web iniciado en http://0.0.0.0:8080")
     
     def monitor():
-        global server_thread
         while True:
             try:
                 if not server_thread.is_alive():
                     logger.warning("Servidor web caído, reiniciando...")
-                    server_thread = threading.Thread(target=run)
-                    server_thread.daemon = False  # Changed to False to prevent termination
-                    server_thread.start()
+                    new_thread = threading.Thread(target=run)
+                    new_thread.daemon = False
+                    new_thread.start()
+                    global server_thread
+                    server_thread = new_thread
             except Exception as e:
                 logger.error(f"Error en monitor: {e}")
-            time.sleep(60)
+            time.sleep(30)
     
+    # Iniciar monitor
     monitor_thread = threading.Thread(target=monitor)
-    monitor_thread.daemon = False  # Changed to False to prevent termination
-    monitor_thread.start()
-    
-    monitor_thread = threading.Thread(target=monitor)
-    monitor_thread.daemon = True
+    monitor_thread.daemon = False
     monitor_thread.start()
