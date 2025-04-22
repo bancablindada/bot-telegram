@@ -40,7 +40,6 @@ def keep_alive():
     logger.info("Servidor web iniciado en http://0.0.0.0:8080")
     
     def monitor():
-        nonlocal server
         while True:
             try:
                 if not server.is_alive():
