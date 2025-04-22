@@ -36,6 +36,20 @@ def run():
         logger.critical("No se pudo iniciar el servidor web después de 5 intentos")
         os._exit(1)
 
+def monitor():
+    global server_thread
+    while True:
+        try:
+            if not server_thread.is_alive():
+                logger.warning("Servidor web caído, reiniciando...")
+                new_thread = threading.Thread(target=run)
+                new_thread.daemon = False
+                new_thread.start()
+                server_thread = new_thread
+        except Exception as e:
+            logger.error(f"Error en monitor: {e}")
+        time.sleep(30)
+
 def keep_alive():
     global server_thread, monitor_thread
     
@@ -48,20 +62,6 @@ def keep_alive():
     server_thread.daemon = False
     server_thread.start()
     logger.info("Servidor web iniciado en http://0.0.0.0:8080")
-    
-    def monitor():
-        while True:
-            try:
-                if not server_thread.is_alive():
-                    logger.warning("Servidor web caído, reiniciando...")
-                    new_thread = threading.Thread(target=run)
-                    new_thread.daemon = False
-                    new_thread.start()
-                    global server_thread
-                    server_thread = new_thread
-            except Exception as e:
-                logger.error(f"Error en monitor: {e}")
-            time.sleep(30)
     
     # Iniciar monitor
     monitor_thread = threading.Thread(target=monitor)
