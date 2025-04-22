@@ -13,15 +13,21 @@ logging.basicConfig(
 )
 
 if __name__ == '__main__':
-    # Mantener el bot activo con un servidor web
-    keep_alive()
-    
-    # Create and run the bot
-    updater = create_bot()
-    print("Banca Blindada Bot is running...")
-    
-    # Configuración para evitar instancias duplicadas
-    updater.start_polling(drop_pending_updates=True)
-    
-    # Run the bot until the user presses Ctrl-C
-    updater.idle()
+    try:
+        # Mantener el bot activo con un servidor web
+        keep_alive()
+        
+        # Create and run the bot
+        updater = create_bot()
+        print("Banca Blindada Bot is running...")
+        
+        # Configuración para evitar instancias duplicadas
+        updater.start_polling(drop_pending_updates=True)
+        
+        # Run the bot until the user presses Ctrl-C
+        updater.idle()
+    except Exception as e:
+        logging.error(f"Error crítico en el bot: {e}")
+        # Esperar antes de reintentar
+        time.sleep(10)
+        # El proceso se reiniciará automáticamente por Replit
