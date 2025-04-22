@@ -16,7 +16,7 @@ def home():
 
 def run():
     try:
-        app.run(host='0.0.0.0', port=8080)
+        app.run(host='0.0.0.0', port=8080, debug=False)
     except Exception as e:
         logger.error(f"Error iniciando servidor web: {e}")
         
