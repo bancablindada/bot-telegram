@@ -1,54 +1,34 @@
 
-from flask import Flask
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
+from flask import Flask, request
+from telegram import Bot, Update
+from telegram.ext import Dispatcher, CommandHandler
 import os
-import threading
-import logging
-from handlers import start_command, help_command, pronosticos_command, message_handler, error_handler
-from config import TELEGRAM_TOKEN
 
-# Configurar logging
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+TOKEN = "7614413819:AAGyklxdklFiO1zKm8hmjhC3vncrzQJ-AKE"
+bot = Bot(token=TOKEN)
 
-# Configurar Flask
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return "Bot activo - Banca Blindada 🔐"
+# Configurar dispatcher
+dispatcher = Dispatcher(bot, None, workers=0)
 
-def run_flask():
-    app.run(host='0.0.0.0', port=8080)
+def start(update, context):
+    update.message.reply_text("¡Hola! Soy tu bot.")
 
-async def main():
-    try:
-        application = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
+dispatcher.add_handler(CommandHandler("start", start))
 
-        # Registrar comandos y manejadores
-        application.add_handler(CommandHandler("start", start_command))
-        application.add_handler(CommandHandler("help", help_command))
-        application.add_handler(CommandHandler("pronosticos", pronosticos_command))
-        application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
-        application.add_error_handler(error_handler)
+# Ruta principal, escucha solo POST
+@app.route("/", methods=["POST"])
+def webhook():
+    update = Update.de_json(request.get_json(force=True), bot)
+    dispatcher.process_update(update)
+    return "ok", 200
 
-        # Iniciar Flask en un hilo separado
-        flask_thread = threading.Thread(target=run_flask)
-        flask_thread.daemon = True
-        flask_thread.start()
+# Esto es opcional, para cuando accedes con GET desde el navegador
+@app.route("/", methods=["GET"])
+def index():
+    return "Bot activo - Banca Blindada 🔒"
 
-        print("Banca Blindada Bot is running...")
-        await application.run_polling()
-    except Exception as e:
-        logger.error(f"Failed to start bot: {e}")
-        raise
-
-if __name__ == '__main__':
-    import asyncio
-    asyncio.run(main())
 
 
    
