@@ -1,42 +1,36 @@
 from flask import Flask, request
 from telegram import Update
-from telegram.ext import Application, CommandHandler
+from telegram.ext import Application, CommandHandler, ContextTypes
 import asyncio
 import os
 
-# === CONFIGURACIÓN ===
-TOKEN = "7614413819:AAGyklxdklFiO1zKm8hmjhC3vncrzQJ-AKE"
-WEBHOOK_URL = "https://bot-telegram-nk7b.onrender.com/"  # Asegúrate que esta sea tu URL exacta de Render
+TOKEN = os.getenv("BOT_TOKEN", "7614413819:AAGyklxdklFiO1zKm8hmjhC3vncrzQJ-AKE")
 
-# === INICIALIZACIÓN FLASK Y TELEGRAM ===
+# Crear Flask app
 app = Flask(__name__)
+
+# Crear Application de telegram
 application = Application.builder().token(TOKEN).build()
 
-# === HANDLERS DE TELEGRAM ===
-async def start(update: Update, context):
+# Handler de comandos
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("¡Hola! Soy tu bot.")
 
+# Añadir handler
 application.add_handler(CommandHandler("start", start))
 
-# === CONFIGURAR EL WEBHOOK JUSTO AL ARRANCAR ===
-@app.before_request
-def set_webhook_once():
-    if not application.bot_data.get("webhook_set"):
-        asyncio.run(application.bot.set_webhook(WEBHOOK_URL))
-        application.bot_data["webhook_set"] = True
-
-# === RUTA PRINCIPAL PARA TELEGRAM (POST) ===
+# Webhook Flask route
 @app.route("/", methods=["POST"])
 def webhook():
+    # Recibir update y procesar con Application
     update = Update.de_json(request.get_json(force=True), application.bot)
     asyncio.run(application.process_update(update))
     return "ok", 200
 
-# === RUTA GET PARA COMPROBAR ===
+# Ruta GET opcional
 @app.route("/", methods=["GET"])
 def index():
     return "Bot activo - Banca Blindada 🔒"
-
 
 
 
