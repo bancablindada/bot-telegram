@@ -1,33 +1,45 @@
-
 from flask import Flask, request
-from telegram import Bot, Update
-from telegram.ext import Dispatcher, CommandHandler
+from telegram import Update
+from telegram.ext import Application, CommandHandler, ContextTypes
 import os
+import asyncio
 
 TOKEN = "7614413819:AAGyklxdklFiO1zKm8hmjhC3vncrzQJ-AKE"
-bot = Bot(token=TOKEN)
+WEBHOOK_URL = "https://bot-telegram-nk7b.onrender.com/"  # Asegúrate que sea la URL correcta de tu proyecto en Render
 
 app = Flask(__name__)
 
-# Configurar dispatcher
-dispatcher = Dispatcher(bot, None, workers=0)
+# Creamos el Application de telegram
+application = Application.builder().token(TOKEN).build()
 
-def start(update, context):
-    update.message.reply_text("¡Hola! Soy tu bot.")
+# Comando /start
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("¡Hola! Soy tu bot.")
 
-dispatcher.add_handler(CommandHandler("start", start))
+# Añadimos el handler
+application.add_handler(CommandHandler("start", start))
 
-# Ruta principal, escucha solo POST
+# Webhook endpoint (para Telegram)
 @app.route("/", methods=["POST"])
-def webhook():
-    update = Update.de_json(request.get_json(force=True), bot)
-    dispatcher.process_update(update)
+async def telegram_webhook():
+    data = request.get_json(force=True)
+    update = Update.de_json(data, application.bot)
+    await application.process_update(update)
     return "ok", 200
 
-# Esto es opcional, para cuando accedes con GET desde el navegador
+# Página informativa si entras por GET (opcional)
 @app.route("/", methods=["GET"])
 def index():
     return "Bot activo - Banca Blindada 🔒"
+
+# Establecer webhook cuando arranca la app
+@app.before_first_request
+def set_webhook():
+    asyncio.run(application.bot.set_webhook(WEBHOOK_URL))
+
+
+
+
 
 
 
