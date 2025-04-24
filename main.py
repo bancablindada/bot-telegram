@@ -38,7 +38,7 @@ def handle_message(update: Update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=reply_text)
 
 # Registrar el manejador
-dispatcher.add_handler(MessageHandler(Filters.TEXT & ~Filters.COMMAND, handle_message))
+dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))
 
 # Webhook para recibir updates
 @app.route("/", methods=["POST"])
