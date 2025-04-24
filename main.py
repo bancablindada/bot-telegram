@@ -1,36 +1,55 @@
 from flask import Flask, request
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from telegram import Bot, Update
+from telegram.ext import Dispatcher, MessageHandler, filters
+import requests
 import os
 
-# === CONFIGURACIÓN ===
-TOKEN = "7614413819:AAGyklxdklFiO1zKm8hmjhC3vncrzQJ-AKE"  # 🔐 Tu token
-WEBHOOK_URL = "https://bot-telegram-nk7b.onrender.com/"   # Tu URL de Render
+# Tus claves (NO compartas esto con nadie más)
+TELEGRAM_TOKEN = "7614413819:AAGyklxdklFiO1zKm8hmjhC3vncrzQJ-AKE"
+OPENROUTER_API_KEY = "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"
 
+# Inicializar Flask y Telegram
 app = Flask(__name__)
-bot_app = ApplicationBuilder().token(TOKEN).build()
+bot = Bot(token=TELEGRAM_TOKEN)
+dispatcher = Dispatcher(bot=bot, update_queue=None, workers=0, use_context=True)
 
-# === HANDLER DEL COMANDO /start ===
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("¡Hola! Soy tu bot, y estoy activo 24/7 🔥")
+# Función para hablar con OpenRouter
+def get_openrouter_response(prompt):
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "model": "openrouter/cinematika:extended",  # Puedes cambiar de modelo si lo deseas
+        "messages": [{"role": "user", "content": prompt}]
+    }
 
-bot_app.add_handler(CommandHandler("start", start))
+    try:
+        response = requests.post("https://openrouter.ai/api/v1/chat/completions", json=data, headers=headers)
+        result = response.json()
+        return result["choices"][0]["message"]["content"]
+    except Exception as e:
+        return f"Error al conectar con OpenRouter: {str(e)}"
 
-# === FLASK: RUTA PARA RECIBIR MENSAJES DE TELEGRAM ===
+# Manejador de mensajes normales (texto)
+def handle_message(update: Update, context):
+    user_text = update.message.text
+    reply_text = get_openrouter_response(user_text)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=reply_text)
+
+# Registrar el manejador
+dispatcher.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+
+# Webhook para recibir updates
 @app.route("/", methods=["POST"])
-def telegram_webhook():
-    update = Update.de_json(request.get_json(force=True), bot_app.bot)
-    bot_app.update_queue.put_nowait(update)
-    return "ok"
+def webhook():
+    update = Update.de_json(request.get_json(force=True), bot)
+    dispatcher.process_update(update)
+    return "ok", 200
 
-# === RUTA DE PRUEBA (GET) ===
 @app.route("/", methods=["GET"])
 def index():
-    return "Bot activo y listo para la acción. 🚀"
-
-# === SOLO PARA LOCAL (Render usa Gunicorn) ===
-if __name__ == "__main__":
-    app.run(port=5000)
+    return "Bot online", 200
 
 
 
