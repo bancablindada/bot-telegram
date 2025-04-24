@@ -4,9 +4,9 @@ from telegram.ext import Dispatcher, MessageHandler, Filters
 import requests
 import os
 
-# Tus claves (NO compartas esto con nadie más)
-TELEGRAM_TOKEN = "7614413819:AAGyklxdklFiO1zKm8hmjhC3vncrzQJ-AKE"
-OPENROUTER_API_KEY = "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"
+# Obtener claves del entorno
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+OPENROUTER_API_KEY = os.getenv("OPENAI_API_KEY")  # Este es el nombre exacto de Render
 
 # Inicializar Flask y Telegram
 app = Flask(__name__)
@@ -20,36 +20,40 @@ def get_openrouter_response(prompt):
         "Content-Type": "application/json"
     }
     data = {
-        "model": "openrouter/cinematika:extended",  # Puedes cambiar de modelo si lo deseas
+        "model": "openrouter/cinematika:extended",
         "messages": [{"role": "user", "content": prompt}]
     }
 
+    response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=data)
+    
     try:
-        response = requests.post("https://openrouter.ai/api/v1/chat/completions", json=data, headers=headers)
-        result = response.json()
-        return result["choices"][0]["message"]["content"]
+        return response.json()['choices'][0]['message']['content']
     except Exception as e:
-        return f"Error al conectar con OpenRouter: {str(e)}"
+        return "Error al obtener respuesta de OpenRouter."
 
-# Manejador de mensajes normales (texto)
+# Función manejadora
 def handle_message(update: Update, context):
-    user_text = update.message.text
-    reply_text = get_openrouter_response(user_text)
-    context.bot.send_message(chat_id=update.effective_chat.id, text=reply_text)
+    prompt = update.message.text
+    reply = get_openrouter_response(prompt)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=reply)
 
-# Registrar el manejador
+# Agregar manejador
 dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))
 
-# Webhook para recibir updates
-@app.route("/", methods=["POST"])
+# Ruta para recibir mensajes desde Telegram
+@app.route('/', methods=['POST'])
 def webhook():
     update = Update.de_json(request.get_json(force=True), bot)
     dispatcher.process_update(update)
-    return "ok", 200
+    return 'OK'
 
-@app.route("/", methods=["GET"])
-def index():
-    return "Bot online", 200
+# Ruta raíz para verificar que el bot funciona
+@app.route('/')
+def home():
+    return "Bot de Telegram funcionando con IA de OpenRouter"
+
+    
+
 
 
 
