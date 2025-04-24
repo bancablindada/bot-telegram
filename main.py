@@ -6,7 +6,7 @@ import os
 
 # Obtener claves del entorno
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
-OPENROUTER_API_KEY = os.getenv("OPENAI_API_KEY")  # Este es el nombre exacto de Render
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")  # ✅ Nombre correcto según Render
 
 # Inicializar Flask y Telegram
 app = Flask(__name__)
@@ -29,6 +29,8 @@ def get_openrouter_response(prompt):
     try:
         return response.json()['choices'][0]['message']['content']
     except Exception as e:
+        print("Error al obtener respuesta de OpenRouter:", e)
+        print("Respuesta completa:", response.text)  # ✅ Ayuda a depurar en Logs
         return "Error al obtener respuesta de OpenRouter."
 
 # Función manejadora
@@ -51,6 +53,8 @@ def webhook():
 @app.route('/')
 def home():
     return "Bot de Telegram funcionando con IA de OpenRouter"
+
+   
 
     
 
