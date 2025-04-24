@@ -1,41 +1,45 @@
 from flask import Flask, request
 from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
-import os
+from telegram.ext import Application, CommandHandler
 import asyncio
+import os
 
+# Configura el token y la URL del webhook
 TOKEN = "7614413819:AAGyklxdklFiO1zKm8hmjhC3vncrzQJ-AKE"
-WEBHOOK_URL = "https://bot-telegram-nk7b.onrender.com/"  # Asegúrate que sea la URL correcta de tu proyecto en Render
+WEBHOOK_URL = "https://bot-telegram-nk7b.onrender.com/"
 
-app = Flask(__name__)
-
-# Creamos el Application de telegram
+# Crea la aplicación de Telegram
 application = Application.builder().token(TOKEN).build()
 
-# Comando /start
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+# Función para el comando /start
+async def start(update: Update, context):
     await update.message.reply_text("¡Hola! Soy tu bot.")
 
-# Añadimos el handler
+# Agrega el handler a la aplicación
 application.add_handler(CommandHandler("start", start))
 
-# Webhook endpoint (para Telegram)
+# Crea la app Flask
+app = Flask(__name__)
+
+# ✅ Configura el webhook al iniciar el servidor
+@app.before_first_request
+def set_webhook():
+    loop = asyncio.get_event_loop()
+    loop.create_task(application.bot.set_webhook(WEBHOOK_URL))
+
+# Ruta para manejar actualizaciones de Telegram (solo POST)
 @app.route("/", methods=["POST"])
-async def telegram_webhook():
-    data = request.get_json(force=True)
-    update = Update.de_json(data, application.bot)
-    await application.process_update(update)
+def webhook():
+    update = Update.de_json(request.get_json(force=True), application.bot)
+    asyncio.run(application.process_update(update))
     return "ok", 200
 
-# Página informativa si entras por GET (opcional)
+# Ruta simple para comprobar si el bot está activo
 @app.route("/", methods=["GET"])
 def index():
     return "Bot activo - Banca Blindada 🔒"
 
-# Establecer webhook cuando arranca la app
-@app.before_first_request
-def set_webhook():
-    asyncio.run(application.bot.set_webhook(WEBHOOK_URL))
+
 
 
 
