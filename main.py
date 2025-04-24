@@ -20,7 +20,7 @@ def get_openrouter_response(prompt):
         "Content-Type": "application/json"
     }
     data = {
-        "model": "thudm/glm-z1",  # ✅ Modelo gratuito y funcional para 24/7
+        "model": "openai/gpt-3.5-turbo",  # ✅ Modelo cambiado al válido
         "messages": [{"role": "user", "content": prompt}]
     }
 
@@ -54,6 +54,8 @@ def webhook():
 def home():
     return "Bot de Telegram funcionando con IA de OpenRouter"
 
+   
+   
        
 
    
